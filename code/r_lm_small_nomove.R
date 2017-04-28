@@ -1,0 +1,6 @@
+setwd("C:/Users/paras/Desktop/Minor/trying now")
+rdata <- read.csv("pradeep1.csv")
+#View(rdata)
+result_line <- lm(result~eval+win_per,rdata)
+#summary(result_line)
+#plot(result_line)

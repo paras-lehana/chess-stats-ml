@@ -1,0 +1,6 @@
+setwd("C:/Users/paras/Desktop/Minor/trying now")
+rdata <- read.csv("small_move.csv")
+View(rdata)
+result_line <- lm(result~win_per+eval+move_no,rdata)
+summary(result_line)
+plot(result_line)
