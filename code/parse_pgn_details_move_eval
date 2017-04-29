@@ -1,0 +1,234 @@
+import re
+import xlsxwriter
+
+game=0
+wmove=0
+bmove=0
+
+f=open('10kprocess.txt','r')
+found=1
+str_move=''
+ignore=0
+count=0
+for fi in iter(f):
+    if len(fi.strip()) == 0 :   #string is empty
+        found=0
+        ignore=0
+    else:
+        if found==1 and ignore==0:
+            if(count >= 15):
+                ignore=1
+                count=0
+                
+            
+
+            if re.search('[0-9]+[\.][ ][A-Z]?[a-z]+[0-9]',fi):
+                count=count+1
+                index1=fi.find('{')
+                move=fi[0:index1]
+                str_move=str_move+move
+                #print (str_move)
+                
+                index2=fi.find('-')
+                index3=fi.find('+')
+                if index2!=-1:
+                    index4=fi.find(']')
+                    if index4!=-1:
+                        eval_score=fi[index2:index4]
+                elif index3!=-1:
+                    if index3<index1:
+                        index3=fi.find('+',index3+1)
+                    index4=fi.find(']')
+                    if index4!=-1:
+                        eval_score=fi[index3:index4]
+
+                wmove=wmove+1
+                
+                print(game)
+                print(str(wmove)+"a",end=' ')
+                print(str_move.strip(),end=' ')
+                print(eco,end=' ')
+                print(eval_score,end=' ')
+                print(welo,end=' ')
+                print(ans,end=' ')
+                        
+            elif re.search('[0-9]+[\.][ ][\.][\.][\.][ ][O][-][O]',fi):
+                count=count+1
+                index1=fi.find('{')
+                move=fi[0:index1]
+                str_move=str_move+move
+                #print (str_move)
+                
+                index2=fi.find('-',index1+1)
+                index3=fi.find('+')
+                if index2!=-1:
+                    index4=fi.find(']')
+                    if index4!=-1:
+                        eval_score=fi[index2:index4]
+                elif index3!=-1:
+                    if index3<index1:
+                        index3=fi.find('+',index3+1)
+                    index4=fi.find(']')
+                    if index4!=-1:
+                        eval_score=fi[index3:index4]
+
+                wmove=wmove+1
+                print(game)
+                print(str(wmove)+"a",end=' ')
+                print(str_move.strip(),end=' ')
+                print(eco,end=' ')
+                print(eval_score,end=' ')
+                print(welo,end=' ')
+                print(ans,end=' ')
+                
+            elif re.search('[0-9][\.] [\.][\.][\.][ ][A-Z]?[a-z]+[0-9][+]?',fi):
+                count=count+1
+                index1=fi.find('{')
+                if index1==-1:
+                    continue
+                index1=fi.find('{')
+                move=fi[0:index1]
+                str_move=str_move+move
+                #print (str_move)
+                
+                index2=fi.find('-')
+                index3=fi.find('+')
+                if index2!=-1:
+                    index4=fi.find(']')
+                    eval_score=fi[index2:index4]
+                elif index3!=-1:
+                    if index3<index1:
+                        index3=fi.find('+',index3+1)
+                        
+                    index4=fi.find(']')
+                    eval_score=fi[index3:index4]
+                
+                bmove=bmove+1
+                print(game)
+                print(str(bmove)+"a",end=' ')
+                print(str_move.strip(),end=' ')
+                print(eco,end=' ')
+                print(eval_score,end=' ')
+                print(belo,end=' ')
+                print(ans,end=' ')
+
+            elif re.search('[0-9]+[\.][ ][\.][\.][\.][ ][O][-][O]',fi):
+                count=count+1
+                index1=fi.find('{')
+                if index1==-1:
+                    continue
+                index1=fi.find('{')
+                move=fi[0:index1]
+                str_move=str_move+move
+                #print (str_move)
+                
+                index2=fi.find('-')
+                index3=fi.find('+')
+                if index2!=-1:
+                    index4=fi.find(']')
+                    eval_score=fi[index2:index4]
+                elif index3!=-1:
+                    if index3<index1:
+                        index3=fi.find('+',index3+1)
+                        
+                    index4=fi.find(']')
+                    eval_score=fi[index3:index4]
+                
+                bmove=bmove+1
+                print(game)
+                print(str(bmove)+"a",end=' ')
+                print(str_move.strip(),end=' ')
+                print(eco,end=' ')
+                print(eval_score,end=' ')
+                print(belo,end=' ')
+                print(ans,end=' ')
+                
+            elif re.search('[R][e][s][u][l][t] ".+"',fi):
+                print ("---------------------------------------------------------------------------------------")
+                
+                if fi.find("1/2-1/2")!=-1:
+                    ans=0.5
+                elif fi.find("0-1")!=-1:
+                    ans=0
+                elif fi.find("1-0")!=-1:
+                    ans=1
+                #print (ans)
+            elif re.search('[W][h][i][t][e][E][l][o] ".+"',fi):
+                lst=re.findall('[0-9]+',fi)
+                string=lst[0]
+                welo=(int(string))
+            elif re.search('[B][l][a][c][k][E][l][o] ".+"',fi):
+                lst=re.findall('[0-9]+',fi)
+                string=lst[0]
+                belo = (int(string))
+            elif re.search('[E][C][O] ".+"',fi):
+                lst=re.findall('[A-Z][0-9]+',fi)
+                eco=lst[0]                
+                    
+        elif found==0:
+            if fi[0:2]=='1.':
+                game=game+1
+                
+                               
+                found=1 #create new game anaylysis
+                str_move=''
+                index1=fi.find('{')
+                move=fi[0:index1]
+                str_move=str_move+move
+                #print (str_move)
+            
+                
+                index2=fi.find('-')
+                index3=fi.find('+')
+                if index2!=-1:
+                    index4=fi.find(']')
+                    if index4!=-1:
+                        eval_score=fi[index2:index4]
+                    
+                        
+                elif index3!=-1:
+                    if index3<index1:
+                        index3=fi.find('+',index3+1)
+                    index4=fi.find(']')
+                if index4!=-1:
+                    
+                        
+                    eval_score=fi[index2:index4]
+
+                wmove=wmove+1
+                print(game)
+                print(str(wmove)+"a",end=' ')
+                print(str_move.strip(),end=' ')
+                print(eco,end=' ')
+                print(eval_score,end=' ')
+                print(welo,end=' ')
+                print(ans,end=' ')
+            
+            
+            elif fi[0]=='[':
+                if re.search('[R][e][s][u][l][t] ".+"',fi):
+                  
+                    if fi.find("1/2-1/2")!=-1:
+                        ans=0.5
+                    elif fi.find("0-1")!=-1:
+                        ans=0
+                    elif fi.find("1-0")!=-1:
+                        ans=1
+                    print (ans)
+                elif re.search('[W][h][i][t][e][E][l][o] ".+"',fi):
+                    lst=re.findall('[0-9]+',fi)
+                    string=lst[0]
+                    welo=string
+                elif re.search('[B][l][a][c][k][E][l][o] ".+"',fi):
+                    lst=re.findall('[0-9]+',fi)
+                    string=lst[0]
+                    belo=string
+                elif re.search('[E][C][O] ".+"',fi):
+                    lst=re.findall('[A-Z][0-9]+',fi)
+                    string=lst[0]
+                    eco=string
+            else:
+                
+                found=1
+        
+workbook.close()
